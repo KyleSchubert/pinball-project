@@ -15,7 +15,7 @@ public class MyGame extends ApplicationAdapter {
 	Texture testImage;
 	private Rectangle testRectangle;
 	private Pinball pinball;
-    private final Vector2 gravityVector = new Vector2(0, -300);
+    //private final Vector2 gravityVector = new Vector2(0, -300);
 	
 	@Override
 	public void create () { // this is where assets are usually loaded, apparently
@@ -31,8 +31,8 @@ public class MyGame extends ApplicationAdapter {
 		testRectangle.width = 30;
 		testRectangle.height = 30;
 
-		pinball = new Pinball(10,230, 700, "pinball v2.png", 15);
-        pinball.addAccelerationField(gravityVector, "gravity");
+		pinball = new Pinball(10,230, 700,  15);
+        //pinball.addAccelerationField(gravityVector, "gravity");
 	}
 
 	@Override
@@ -43,13 +43,13 @@ public class MyGame extends ApplicationAdapter {
 		batch.setProjectionMatrix(camera.combined); // the guide said to put this
 		batch.begin();
 		batch.draw(testImage, testRectangle.x, testRectangle.y);
-		batch.draw(pinball.getTexture(), pinball.getX(), pinball.getY());
+		//batch.draw(pinball.getTexture(), pinball.getX(), pinball.getY());
 		batch.end();
 
 		testRectangle.x += 1;
 		testRectangle.y -= 1;
 
-		pinball.advance(Gdx.graphics.getDeltaTime());
+		//pinball.advance(Gdx.graphics.getDeltaTime());
 	}
 	
 	@Override
