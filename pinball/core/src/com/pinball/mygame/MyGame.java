@@ -84,7 +84,7 @@ public class MyGame extends ApplicationAdapter {
 		batch.begin();
 		batch.draw(testImage, testRectangle.x, testRectangle.y);
         Vector2 pinballPosition = pinballPhysicsSpot.getPosition();
-        float pinballDegrees = (float) Math.toDegrees(pinballPhysicsSpot.getAngle()); // doesn't do anything to circles
+        float pinballDegrees = (float) Math.toDegrees(pinballPhysicsSpot.getAngle()); // doesn't do anything to circles?
         drawSprite(pinball, pinballPosition.x, pinballPosition.y, pinballDegrees);
 		batch.end();
 
