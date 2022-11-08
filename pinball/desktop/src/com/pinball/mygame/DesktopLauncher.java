@@ -8,7 +8,7 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setTitle("Pinball Game");
-		config.setWindowedMode(750, 900); // 750x900 looks fine I guess
+		config.setWindowedMode(800, 900); // 800x900 looks fine I guess
 		config.useVsync(true);
 		config.setForegroundFPS(60);
 		new Lwjgl3Application(new MyGame(), config);

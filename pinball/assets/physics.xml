@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- created with https://www.codeandweb.com/physicseditor -->
+<bodydef>
+
+	<body name="pinball v2">
+		<is_dynamic/>
+		<linear_damping>0</linear_damping>
+		<angular_damping>0</angular_damping>
+		<allow_sleep/>
+		<fixture>
+			<density>2</density>
+			<friction>0</friction>
+			<restitution>0</restitution>
+			<filter_category_bits>1</filter_category_bits>
+			<filter_mask_bits>65535</filter_mask_bits>
+			<filter_group_index>0</filter_group_index>
+			<circle x="16.000" y="16.000" r="15.203"/>
+		</fixture>
+	</body>
+
+	<body name="pinball board">
+		<is_dynamic/>
+		<linear_damping>0</linear_damping>
+		<angular_damping>0</angular_damping>
+		<allow_sleep/>
+		<fixture>
+			<density>2</density>
+			<friction>0</friction>
+			<restitution>0</restitution>
+			<filter_category_bits>1</filter_category_bits>
+			<filter_mask_bits>65535</filter_mask_bits>
+			<filter_group_index>0</filter_group_index>
+			<polygon>775.0000, 851.5000, 760.0000, 864.5000, 771.5000, 849.0000, 783.5000, 837.0000</polygon>
+			<polygon>28.5000, 840.0000, 27.5000, 833.0000, 36.5000, 845.0000, 42.5000, 858.0000, 35.5000, 851.0000</polygon>
+			<polygon>100.0000, 883.5000, 94.0000, 880.5000, 88.0000, 875.5000, 127.0000, 881.5000, 119.0000, 885.5000, 118.0000, 885.5000</polygon>
+			<polygon>56.0000, 867.5000, 42.5000, 858.0000, 94.0000, 880.5000, 71.0000, 874.5000</polygon>
+			<polygon>683.0000, 107.5000, 686.5000, 110.0000, 682.0000, 110.5000, 666.0000, 102.5000</polygon>
+			<polygon>747.0000, 871.5000, 732.0000, 877.5000, 697.0000, 885.5000, 736.0000, 871.5000, 760.0000, 864.5000</polygon>
+			<polygon>733.0000, 802.5000, 684.0000, 825.5000, 682.5000, 825.0000, 687.0000, 820.5000, 730.5000, 799.0000, 734.5000, 800.0000</polygon>
+			<polygon>731.0000, 132.5000, 783.5000, 133.0000, 779.0000, 136.5000, 734.5000, 137.0000, 730.5000, 134.0000</polygon>
+			<polygon>682.0000, 283.5000, 628.5000, 324.0000, 625.0000, 321.5000, 682.5000, 277.0000, 686.5000, 278.0000</polygon>
+			<polygon>32.0000, 450.5000, 85.5000, 410.0000, 88.0000, 413.5000, 31.5000, 457.0000, 27.5000, 456.0000</polygon>
+			<polygon>89.5000, 411.0000, 88.0000, 413.5000, 85.5000, 410.0000, 85.0000, 323.5000, 89.5000, 322.0000</polygon>
+			<polygon>27.5000, 112.0000, 29.0000, 109.5000, 31.5000, 111.0000, 31.5000, 276.0000, 27.5000, 279.0000</polygon>
+			<polygon>391.0000, 1.5000, 666.0000, 102.5000, 682.0000, 110.5000, 381.0000, 0.5000</polygon>
+			<polygon>333.0000, 0.5000, 31.5000, 111.0000, 29.0000, 109.5000, 323.0000, 1.5000</polygon>
+			<polygon>31.5000, 276.0000, 39.0000, 283.5000, 27.5000, 279.0000</polygon>
+			<polygon>27.5000, 279.0000, 39.0000, 283.5000, 89.5000, 322.0000, 85.0000, 323.5000</polygon>
+			<polygon>27.5000, 456.0000, 31.5000, 457.0000, 31.5000, 833.0000, 27.5000, 833.0000</polygon>
+			<polygon>31.5000, 833.0000, 36.5000, 845.0000, 27.5000, 833.0000</polygon>
+			<polygon>36.5000, 845.0000, 40.0000, 849.5000, 42.5000, 858.0000</polygon>
+			<polygon>40.0000, 849.5000, 56.0000, 862.5000, 42.5000, 858.0000</polygon>
+			<polygon>56.0000, 862.5000, 70.0000, 869.5000, 42.5000, 858.0000</polygon>
+			<polygon>70.0000, 869.5000, 88.0000, 875.5000, 94.0000, 880.5000</polygon>
+			<polygon>127.0000, 881.5000, 686.0000, 881.5000, 697.0000, 885.5000, 119.0000, 885.5000</polygon>
+			<polygon>686.0000, 881.5000, 715.0000, 877.5000, 697.0000, 885.5000</polygon>
+			<polygon>715.0000, 877.5000, 736.0000, 871.5000, 697.0000, 885.5000</polygon>
+			<polygon>736.0000, 871.5000, 755.0000, 862.5000, 760.0000, 864.5000</polygon>
+			<polygon>755.0000, 862.5000, 771.5000, 849.0000, 760.0000, 864.5000</polygon>
+			<polygon>771.5000, 849.0000, 779.5000, 833.0000, 783.5000, 837.0000</polygon>
+			<polygon>682.0000, 110.5000, 686.5000, 110.0000, 686.5000, 278.0000, 682.5000, 277.0000</polygon>
+			<polygon>628.5000, 324.0000, 628.5000, 409.0000, 624.5000, 412.0000, 625.0000, 321.5000</polygon>
+			<polygon>624.5000, 412.0000, 628.5000, 409.0000, 686.5000, 455.0000, 679.0000, 453.5000</polygon>
+			<polygon>679.0000, 453.5000, 686.5000, 455.0000, 682.5000, 458.0000</polygon>
+			<polygon>686.5000, 455.0000, 687.0000, 820.5000, 682.5000, 825.0000, 682.5000, 458.0000</polygon>
+			<polygon>734.5000, 800.0000, 730.5000, 799.0000, 730.5000, 134.0000, 734.5000, 137.0000</polygon>
+			<polygon>779.0000, 136.5000, 783.5000, 133.0000, 783.5000, 837.0000, 779.5000, 833.0000</polygon>
+		</fixture>
+	</body>
+
+	<body name="pinball board paddle area">
+		<is_dynamic/>
+		<linear_damping>0</linear_damping>
+		<angular_damping>0</angular_damping>
+		<allow_sleep/>
+		<fixture>
+			<density>2</density>
+			<friction>0</friction>
+			<restitution>0</restitution>
+			<filter_category_bits>1</filter_category_bits>
+			<filter_mask_bits>65535</filter_mask_bits>
+			<filter_group_index>0</filter_group_index>
+			<polygon>71.5000, 256.0000, 68.5000, 249.0000, 104.5000, 168.0000, 104.5000, 251.0000, 103.0000, 254.5000, 79.0000, 259.5000, 78.0000, 259.5000</polygon>
+			<polygon>233.5000, 90.0000, 241.0000, 118.5000, 104.5000, 168.0000, 68.5000, 154.0000, 88.0000, 142.5000, 226.0000, 91.5000</polygon>
+			<polygon>72.0000, 146.5000, 77.0000, 143.5000, 88.0000, 142.5000, 68.5000, 154.0000</polygon>
+			<polygon>68.5000, 154.0000, 104.5000, 168.0000, 68.5000, 249.0000</polygon>
+			<polygon>97.0000, 259.5000, 79.0000, 259.5000, 103.0000, 254.5000</polygon>
+		</fixture>
+	</body>
+
+	<body name="pinball board paddle area2">
+		<is_dynamic/>
+		<linear_damping>0</linear_damping>
+		<angular_damping>0</angular_damping>
+		<allow_sleep/>
+		<fixture>
+			<density>2</density>
+			<friction>0</friction>
+			<restitution>0</restitution>
+			<filter_category_bits>1</filter_category_bits>
+			<filter_mask_bits>65535</filter_mask_bits>
+			<filter_group_index>0</filter_group_index>
+			<polygon>642.5000, 147.0000, 645.5000, 154.0000, 619.0000, 259.5000, 618.0000, 259.5000, 609.5000, 251.0000, 609.0000, 167.5000, 626.0000, 142.5000, 637.0000, 143.5000</polygon>
+			<polygon>642.0000, 256.5000, 637.0000, 259.5000, 619.0000, 259.5000, 645.5000, 154.0000, 645.5000, 249.0000</polygon>
+			<polygon>472.5000, 118.0000, 481.0000, 89.5000, 626.0000, 142.5000, 609.0000, 167.5000</polygon>
+			<polygon>610.5000, 254.0000, 609.5000, 251.0000, 618.0000, 259.5000</polygon>
+		</fixture>
+	</body>
+
+	<metadata>
+		<format>1</format>
+		<ptm_ratio>32</ptm_ratio>
+	</metadata>
+
+</bodydef>
+
