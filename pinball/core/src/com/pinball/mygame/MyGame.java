@@ -25,42 +25,45 @@ public class MyGame extends ApplicationAdapter {
     Body pinballBoard;
     Body pinballBoardPaddleArea1;
     Body pinballBoardPaddleArea2;
+    Sprite pinballBoardSprite;
+    Sprite pinballBoardPaddleArea1Sprite;
+    Sprite pinballBoardPaddleArea2Sprite;
 
 	@Override
 	public void create () { // this is where assets are usually loaded, apparently
         Box2D.init();
         world = new World(new Vector2(0, -50), true);
-
         physicsBodies = new PhysicsShapeCache("physics.xml");
-
 		batch = new SpriteBatch();
-
 		camera = new OrthographicCamera();
         viewport = new ExtendViewport(800*SCALE_FACTOR, 900*SCALE_FACTOR, camera);
+        debugRenderer = new Box2DDebugRenderer();
 
-        Texture pinballTexture = new Texture("pinball v2.png"); // so I don't need to .dispose() this one?
-        pinball = new Sprite(pinballTexture, 0, 0, 32, 32);
-        pinball.setScale(SCALE_FACTOR);
-        pinball.setOrigin(0, 0);
-
+        pinball = prepareGenericSprite("pinball v2.png", 32, 32);
         pinballPhysicsSpot = createBody("pinball v2", 5, 40, 0);
 
-        debugRenderer = new Box2DDebugRenderer();
+        pinballBoardSprite = prepareGenericSprite("pinball board.png", 800, 900);
+        pinballBoardPaddleArea1Sprite = prepareGenericSprite("pinball board paddle area.png", 800, 900);
+        pinballBoardPaddleArea2Sprite = prepareGenericSprite("pinball board paddle area2.png", 800, 900);
 	}
 
 	@Override
 	public void render () {
-		ScreenUtils.clear(0, 0, 0, 1);
-
+		ScreenUtils.clear(0.36f, 0.4f, 0.45f, 1);
         stepWorld();
-
 		batch.begin();
+
         Vector2 pinballPosition = pinballPhysicsSpot.getPosition();
         float pinballDegrees = (float) Math.toDegrees(pinballPhysicsSpot.getAngle()); // doesn't do anything to circles?
         drawSprite(pinball, pinballPosition.x, pinballPosition.y, pinballDegrees);
+        drawSprite(pinballBoardSprite, 0, 0, 0);
+        drawSprite(pinballBoardPaddleArea1Sprite, 0, 0, 0);
+        drawSprite(pinballBoardPaddleArea2Sprite, 0, 0, 0);
+
 		batch.end();
 
-        debugRenderer.render(world, camera.combined);
+        // DEBUG WIREFRAME:
+        //debugRenderer.render(world, camera.combined);
 	}
 
     private void drawSprite(Sprite sprite, float x, float y, float degrees) {
@@ -102,13 +105,21 @@ public class MyGame extends ApplicationAdapter {
         return body;
     }
 
+    private Sprite prepareGenericSprite(String texture, int width, int height) {
+        Texture spriteTexture = new Texture(texture);
+        Sprite sprite = new Sprite(spriteTexture, 0, 0, width, height); // MIGHT be a performance problem
+        sprite.setScale(SCALE_FACTOR);
+        sprite.setOrigin(0, 0);
+        return sprite;
+    }
+
 	@Override
 	public void dispose () {
 		batch.dispose();
         world.dispose();
         debugRenderer.dispose();
 	}
-    
+
     // START SUGGESTED CODE FROM -> https://www.codeandweb.com/physicseditor/tutorials/libgdx-physics
     static final float STEP_TIME = 1f / 60f;
     static final int VELOCITY_ITERATIONS = 6;
