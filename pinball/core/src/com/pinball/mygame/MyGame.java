@@ -17,17 +17,13 @@ public class MyGame extends ApplicationAdapter {
 	private SpriteBatch batch;
 	World world;
     ExtendViewport viewport;
-    Sprite pinball;
     static final float SCALE_FACTOR = 0.05f;
     Box2DDebugRenderer debugRenderer;
     PhysicsShapeCache physicsBodies;
-    Body pinballPhysicsSpot;
-    Body pinballBoard;
-    Body pinballBoardPaddleArea1;
-    Body pinballBoardPaddleArea2;
-    Sprite pinballBoardSprite;
-    Sprite pinballBoardPaddleArea1Sprite;
-    Sprite pinballBoardPaddleArea2Sprite;
+    Entity pinball;
+    Entity pinballBoard;
+    Entity paddleArea1;
+    Entity paddleArea2;
 
 	@Override
 	public void create () { // this is where assets are usually loaded, apparently
@@ -38,13 +34,19 @@ public class MyGame extends ApplicationAdapter {
 		camera = new OrthographicCamera();
         viewport = new ExtendViewport(800*SCALE_FACTOR, 900*SCALE_FACTOR, camera);
         debugRenderer = new Box2DDebugRenderer();
+        pinball = new Entity();
+        pinballBoard = new Entity();
+        paddleArea1 = new Entity();
+        paddleArea2 = new Entity();
 
-        pinball = prepareGenericSprite("pinball v2.png", 32, 32);
-        pinballPhysicsSpot = createBody("pinball v2", 5, 40, 0);
+        pinball.setSprite(prepareGenericSprite("pinball v3.png", 32, 32));
+        pinball.setBody(createBody("pinball v2", 29.4f, 42, 0));
 
-        pinballBoardSprite = prepareGenericSprite("pinball board.png", 800, 900);
-        pinballBoardPaddleArea1Sprite = prepareGenericSprite("pinball board paddle area.png", 800, 900);
-        pinballBoardPaddleArea2Sprite = prepareGenericSprite("pinball board paddle area2.png", 800, 900);
+        // color palette -->  https://coolors.co/7fe57f-000000-5c6672-b8c5d6-f4faff
+        // added noise of   17, 12, 26
+        pinballBoard.setSprite(prepareGenericSprite("pinball board v2.png", 800, 900));
+        paddleArea1.setSprite(prepareGenericSprite("pinball board paddle area v2.png", 800, 900));
+        paddleArea2.setSprite(prepareGenericSprite("pinball board paddle area2 v2.png", 800, 900));
 	}
 
 	@Override
@@ -53,12 +55,12 @@ public class MyGame extends ApplicationAdapter {
         stepWorld();
 		batch.begin();
 
-        Vector2 pinballPosition = pinballPhysicsSpot.getPosition();
-        float pinballDegrees = (float) Math.toDegrees(pinballPhysicsSpot.getAngle()); // doesn't do anything to circles?
-        drawSprite(pinball, pinballPosition.x, pinballPosition.y, pinballDegrees);
-        drawSprite(pinballBoardSprite, 0, 0, 0);
-        drawSprite(pinballBoardPaddleArea1Sprite, 0, 0, 0);
-        drawSprite(pinballBoardPaddleArea2Sprite, 0, 0, 0);
+        Vector2 pinballPosition = pinball.getBody().getPosition();
+        float pinballDegrees = (float) Math.toDegrees(pinball.getBody().getAngle()); // doesn't do anything to circles?
+        drawSprite(pinball.getSprite(), pinballPosition.x, pinballPosition.y, pinballDegrees);
+        drawSprite(pinballBoard.getSprite(), 0, 0, 0);
+        drawSprite(paddleArea1.getSprite(), 0, 0, 0);
+        drawSprite(paddleArea2.getSprite(), 0, 0, 0);
 
 		batch.end();
 
@@ -86,9 +88,9 @@ public class MyGame extends ApplicationAdapter {
     }
 
     private void createPinballBoard() {
-        pinballBoard = prepareWorldPart(pinballBoard, "pinball board");
-        pinballBoardPaddleArea1 = prepareWorldPart(pinballBoardPaddleArea1, "pinball board paddle area");
-        pinballBoardPaddleArea2 = prepareWorldPart(pinballBoardPaddleArea2, "pinball board paddle area2");
+        pinballBoard.setBody(prepareWorldPart(pinballBoard.getBody(), "pinball board"));
+        paddleArea1.setBody(prepareWorldPart(paddleArea1.getBody(), "pinball board paddle area"));
+        paddleArea2.setBody(prepareWorldPart(paddleArea2.getBody(), "pinball board paddle area2"));
     }
 
     private Body prepareWorldPart(Body body, String physicsBodyName) {
