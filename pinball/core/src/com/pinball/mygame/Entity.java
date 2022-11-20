@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.Body;
 
 public class Entity {
-    Sprite sprite;
-    Body body;
+    private Sprite sprite;
+    private Body body;
 
     public void setBody(Body body) {
         this.body = body;

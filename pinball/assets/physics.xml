@@ -10,7 +10,7 @@
 		<fixture>
 			<density>2</density>
 			<friction>1</friction>
-			<restitution>0</restitution>
+			<restitution>0.1</restitution>
 			<filter_category_bits>1</filter_category_bits>
 			<filter_mask_bits>65535</filter_mask_bits>
 			<filter_group_index>0</filter_group_index>
@@ -104,6 +104,23 @@
 			<polygon>642.0000, 256.5000, 637.0000, 259.5000, 619.0000, 259.5000, 645.5000, 154.0000, 645.5000, 249.0000</polygon>
 			<polygon>472.5000, 118.0000, 481.0000, 89.5000, 626.0000, 142.5000, 609.0000, 167.5000</polygon>
 			<polygon>610.5000, 254.0000, 609.5000, 251.0000, 618.0000, 259.5000</polygon>
+		</fixture>
+	</body>
+
+	<body name="pusher">
+		<is_dynamic/>
+		<linear_damping>0</linear_damping>
+		<angular_damping>0</angular_damping>
+		<fixed_rotation/>
+		<allow_sleep/>
+		<fixture>
+			<density>30</density>
+			<friction>0</friction>
+			<restitution>0</restitution>
+			<filter_category_bits>1</filter_category_bits>
+			<filter_mask_bits>65535</filter_mask_bits>
+			<filter_group_index>0</filter_group_index>
+			<polygon>0.0000, 44.0000, 0.0000, 0.0000, 43.0000, 0.0000, 43.0000, 44.0000</polygon>
 		</fixture>
 	</body>
 

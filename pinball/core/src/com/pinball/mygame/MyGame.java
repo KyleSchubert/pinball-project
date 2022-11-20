@@ -2,12 +2,14 @@ package com.pinball.mygame;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.codeandweb.physicseditor.PhysicsShapeCache;
@@ -24,6 +26,9 @@ public class MyGame extends ApplicationAdapter {
     Entity pinballBoard;
     Entity paddleArea1;
     Entity paddleArea2;
+    Entity pusher;
+    DistanceJointDef jointDef;
+    static final float ORIGINAL_PUSHER_JOINT_LENGTH = 1 / (8 * SCALE_FACTOR);
 
 	@Override
 	public void create () { // this is where assets are usually loaded, apparently
@@ -38,12 +43,15 @@ public class MyGame extends ApplicationAdapter {
         pinballBoard = new Entity();
         paddleArea1 = new Entity();
         paddleArea2 = new Entity();
+        pusher = new Entity();
 
         pinball.setSprite(prepareGenericSprite("pinball v3.png", 32, 32));
-        pinball.setBody(createBody("pinball v2", 29.4f, 42, 0));
+        pinball.setBody(createBody("pinball v2", 37.8f, 8, 0));
 
         // color palette -->  https://coolors.co/7fe57f-000000-5c6672-b8c5d6-f4faff
         // added noise of   17, 12, 26
+        pusher.setSprite(prepareGenericSprite("pusher.png", 43, 44));
+        pusher.setBody(createBody("pusher", 37.8f, 7, 0));
         pinballBoard.setSprite(prepareGenericSprite("pinball board v2.png", 800, 900));
         paddleArea1.setSprite(prepareGenericSprite("pinball board paddle area v2.png", 800, 900));
         paddleArea2.setSprite(prepareGenericSprite("pinball board paddle area2 v2.png", 800, 900));
@@ -56,8 +64,10 @@ public class MyGame extends ApplicationAdapter {
 		batch.begin();
 
         Vector2 pinballPosition = pinball.getBody().getPosition();
-        float pinballDegrees = (float) Math.toDegrees(pinball.getBody().getAngle()); // doesn't do anything to circles?
+        float pinballDegrees = (float) Math.toDegrees(pinball.getBody().getAngle());
+        Vector2 pusherPosition = pusher.getBody().getPosition();
         drawSprite(pinball.getSprite(), pinballPosition.x, pinballPosition.y, pinballDegrees);
+        drawSprite(pusher.getSprite(), pusherPosition.x, pusherPosition.y, 0);
         drawSprite(pinballBoard.getSprite(), 0, 0, 0);
         drawSprite(paddleArea1.getSprite(), 0, 0, 0);
         drawSprite(paddleArea2.getSprite(), 0, 0, 0);
@@ -65,7 +75,7 @@ public class MyGame extends ApplicationAdapter {
 		batch.end();
 
         // DEBUG WIREFRAME:
-        //debugRenderer.render(world, camera.combined);
+        debugRenderer.render(world, camera.combined);
 	}
 
     private void drawSprite(Sprite sprite, float x, float y, float degrees) {
@@ -91,6 +101,15 @@ public class MyGame extends ApplicationAdapter {
         pinballBoard.setBody(prepareWorldPart(pinballBoard.getBody(), "pinball board"));
         paddleArea1.setBody(prepareWorldPart(paddleArea1.getBody(), "pinball board paddle area"));
         paddleArea2.setBody(prepareWorldPart(paddleArea2.getBody(), "pinball board paddle area2"));
+        Vector2 jointOffsetBodyA = new Vector2(37.8f,6);
+        Vector2 jointOffsetBodyB = new Vector2(pusher.getBody().getWorldCenter().x, pusher.getBody().getWorldCenter().y);
+        jointDef = new DistanceJointDef();
+        jointDef.initialize(pinballBoard.getBody(), pusher.getBody(), jointOffsetBodyA, jointOffsetBodyB);
+        jointDef.collideConnected = true;
+        jointDef.frequencyHz = 40f;
+        jointDef.length = ORIGINAL_PUSHER_JOINT_LENGTH;
+        jointDef.dampingRatio = 1f;
+        world.createJoint(jointDef);
     }
 
     private Body prepareWorldPart(Body body, String physicsBodyName) {
@@ -128,11 +147,28 @@ public class MyGame extends ApplicationAdapter {
     static final int POSITION_ITERATIONS = 2;
 
     float accumulator = 0;
+    static final float MAX_PUSHER_POWER = 5000000;
+    float pusherChargedPercentPower = 0;
+    boolean isPusherCharging = false;
     private void stepWorld() {
         float delta = Gdx.graphics.getDeltaTime();
         accumulator += Math.min(delta, 0.25f);
         if (accumulator >= STEP_TIME) {
             accumulator -= STEP_TIME;
+            if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+                isPusherCharging = true;
+                pusherChargedPercentPower += 2 * STEP_TIME;
+                if (pusherChargedPercentPower > 1) {
+                    pusherChargedPercentPower = 1;
+                }
+            }
+            else {
+                if (isPusherCharging) {
+                    isPusherCharging = false;
+                    pusher.getBody().applyForceToCenter(0, MAX_PUSHER_POWER * pusherChargedPercentPower, true);
+                    pusherChargedPercentPower = 0;
+                }
+            }
             world.step(STEP_TIME, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
         }
     }
