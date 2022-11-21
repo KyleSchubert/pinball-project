@@ -36,6 +36,7 @@ public class MyGame extends ApplicationAdapter {
     RevoluteJointDef rightPaddleJointDef;
     RevoluteJoint rightPaddleJoint;
     RevoluteJoint leftPaddleJoint;
+    Entity despawnLine;
     static final float ORIGINAL_PUSHER_JOINT_LENGTH = 1 / (8 * SCALE_FACTOR);
 
 	@Override
@@ -54,10 +55,12 @@ public class MyGame extends ApplicationAdapter {
         pusher = new Entity();
         leftPaddle = new Entity();
         rightPaddle = new Entity();
+        despawnLine = new Entity();
 
 
         pinball.setSprite(prepareGenericSprite("pinball v3.png", 32, 32));
-        pinball.setBody(createBody("pinball v2", 37.8f, 8));
+        pinball.setBody(createBody("pinball v2", 37.8f, 12));
+        pinball.getBody().setUserData("pinball");
 
         // color palette -->  https://coolors.co/7fe57f-000000-5c6672-b8c5d6-f4faff
         // added noise of   17, 12, 26
@@ -68,11 +71,17 @@ public class MyGame extends ApplicationAdapter {
         paddleAreaLeft.setSprite(prepareGenericSprite("pinball board paddle area v2.png", 800, 900));
         paddleAreaRight.setSprite(prepareGenericSprite("pinball board paddle area2 v2.png", 800, 900));
 
+        despawnLine.setSprite(prepareGenericSprite("despawn line.png", 247, 14)); // you can't see it either way, though
+        despawnLine.setBody(createBody("despawn line", 12.3f, -3));
+        despawnLine.getBody().setUserData("despawn line");
+
         leftPaddle.setSprite(prepareGenericSprite("left paddle.png", 102, 38));
         leftPaddle.setBody(createBody("left paddle", 12.5f, 4.5f));
 
         rightPaddle.setSprite(prepareGenericSprite("right paddle.png", 102, 38));
         rightPaddle.setBody(createBody("right paddle", 30, 7));
+
+        world.setContactListener(new CustomContactListener());
 	}
 
 	@Override
@@ -88,6 +97,7 @@ public class MyGame extends ApplicationAdapter {
         drawSprite(pinballBoard.getSprite(), 0, 0, 0);
         drawSprite(paddleAreaLeft.getSprite(), 0, 0, 0);
         drawSprite(paddleAreaRight.getSprite(), 0, 0, 0);
+        drawSprite(despawnLine.getSprite(), despawnLine.getX(), despawnLine.getY(), 0);
 
 		batch.end();
 
@@ -162,7 +172,6 @@ public class MyGame extends ApplicationAdapter {
         rightPaddleJointDef.maxMotorTorque = 120000;
         rightPaddleJointDef.motorSpeed = -4000;
         rightPaddleJoint = (RevoluteJoint) world.createJoint(rightPaddleJointDef);
-
     }
 
     private Body prepareWorldPart(Body body, String physicsBodyName) {
@@ -224,6 +233,10 @@ public class MyGame extends ApplicationAdapter {
             }
             rightPaddleJoint.enableMotor(Gdx.input.isKeyPressed(Input.Keys.RIGHT));
             leftPaddleJoint.enableMotor(Gdx.input.isKeyPressed(Input.Keys.LEFT));
+            if (pinball.getBody().getUserData().equals("pinball dead")) {
+                pinball.setBody(createBody("pinball v2", 37.8f, 12));
+                pinball.getBody().setUserData("pinball");
+            }
             world.step(STEP_TIME, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
         }
     }
