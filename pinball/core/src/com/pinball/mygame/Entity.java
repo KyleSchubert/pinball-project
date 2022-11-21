@@ -22,4 +22,16 @@ public class Entity {
     public Sprite getSprite() {
         return sprite;
     }
+
+    public float getX() {
+        return this.body.getPosition().x;
+    }
+
+    public float getY() {
+        return this.body.getPosition().y;
+    }
+
+    public float getDegrees() {
+        return (float) Math.toDegrees(this.body.getAngle());
+    }
 }

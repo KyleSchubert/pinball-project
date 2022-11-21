@@ -6,7 +6,7 @@
 		<is_dynamic/>
 		<linear_damping>0</linear_damping>
 		<angular_damping>0</angular_damping>
-		<allow_sleep/>
+		<is_bullet/>
 		<fixture>
 			<density>2</density>
 			<friction>1</friction>
@@ -121,6 +121,38 @@
 			<filter_mask_bits>65535</filter_mask_bits>
 			<filter_group_index>0</filter_group_index>
 			<polygon>0.0000, 44.0000, 0.0000, 0.0000, 43.0000, 0.0000, 43.0000, 44.0000</polygon>
+		</fixture>
+	</body>
+
+	<body name="left paddle">
+		<is_dynamic/>
+		<linear_damping>0</linear_damping>
+		<angular_damping>0</angular_damping>
+		<allow_sleep/>
+		<fixture>
+			<density>15</density>
+			<friction>10</friction>
+			<restitution>0</restitution>
+			<filter_category_bits>1</filter_category_bits>
+			<filter_mask_bits>65535</filter_mask_bits>
+			<filter_group_index>0</filter_group_index>
+			<polygon>0.0000, 38.0000, 0.0000, 23.0000, 26.0000, 8.0000, 51.0000, 2.0000, 81.0000, 2.0000, 101.0000, 6.0000, 27.0000, 38.0000</polygon>
+		</fixture>
+	</body>
+
+	<body name="right paddle">
+		<is_dynamic/>
+		<linear_damping>0</linear_damping>
+		<angular_damping>0</angular_damping>
+		<allow_sleep/>
+		<fixture>
+			<density>15</density>
+			<friction>10</friction>
+			<restitution>0</restitution>
+			<filter_category_bits>1</filter_category_bits>
+			<filter_mask_bits>65535</filter_mask_bits>
+			<filter_group_index>0</filter_group_index>
+			<polygon>101.0000, 38.0000, 74.0000, 38.0000, 0.0000, 6.0000, 20.0000, 2.0000, 50.0000, 2.0000, 75.0000, 8.0000, 101.0000, 23.0000</polygon>
 		</fixture>
 	</body>
 
