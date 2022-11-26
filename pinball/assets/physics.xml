@@ -2,13 +2,14 @@
 <!-- created with https://www.codeandweb.com/physicseditor -->
 <bodydef>
 
-	<body name="pinball v2">
+	<body name="pinball">
 		<is_dynamic/>
 		<linear_damping>0</linear_damping>
-		<angular_damping>0</angular_damping>
+		<angular_damping>2</angular_damping>
 		<is_bullet/>
+		<allow_sleep/>
 		<fixture>
-			<density>2</density>
+			<density>1.8</density>
 			<friction>1</friction>
 			<restitution>0.1</restitution>
 			<filter_category_bits>1</filter_category_bits>
@@ -19,9 +20,9 @@
 	</body>
 
 	<body name="pinball board">
-		<is_dynamic/>
 		<linear_damping>0</linear_damping>
 		<angular_damping>0</angular_damping>
+		<fixed_rotation/>
 		<allow_sleep/>
 		<fixture>
 			<density>2</density>
@@ -68,14 +69,14 @@
 		</fixture>
 	</body>
 
-	<body name="pinball board paddle area">
-		<is_dynamic/>
+	<body name="pinball board left paddle area">
 		<linear_damping>0</linear_damping>
 		<angular_damping>0</angular_damping>
+		<fixed_rotation/>
 		<allow_sleep/>
 		<fixture>
 			<density>2</density>
-			<friction>0</friction>
+			<friction>1</friction>
 			<restitution>0</restitution>
 			<filter_category_bits>1</filter_category_bits>
 			<filter_mask_bits>65535</filter_mask_bits>
@@ -88,10 +89,10 @@
 		</fixture>
 	</body>
 
-	<body name="pinball board paddle area2">
-		<is_dynamic/>
+	<body name="pinball board right paddle area">
 		<linear_damping>0</linear_damping>
 		<angular_damping>0</angular_damping>
+		<fixed_rotation/>
 		<allow_sleep/>
 		<fixture>
 			<density>2</density>
@@ -115,7 +116,7 @@
 		<allow_sleep/>
 		<fixture>
 			<density>30</density>
-			<friction>0</friction>
+			<friction>1</friction>
 			<restitution>0</restitution>
 			<filter_category_bits>1</filter_category_bits>
 			<filter_mask_bits>65535</filter_mask_bits>
@@ -131,7 +132,7 @@
 		<allow_sleep/>
 		<fixture>
 			<density>15</density>
-			<friction>10</friction>
+			<friction>0</friction>
 			<restitution>0</restitution>
 			<filter_category_bits>1</filter_category_bits>
 			<filter_mask_bits>65535</filter_mask_bits>
@@ -147,7 +148,7 @@
 		<allow_sleep/>
 		<fixture>
 			<density>15</density>
-			<friction>10</friction>
+			<friction>0</friction>
 			<restitution>0</restitution>
 			<filter_category_bits>1</filter_category_bits>
 			<filter_mask_bits>65535</filter_mask_bits>
@@ -159,6 +160,7 @@
 	<body name="despawn line">
 		<linear_damping>0</linear_damping>
 		<angular_damping>0</angular_damping>
+		<fixed_rotation/>
 		<allow_sleep/>
 		<fixture>
 			<density>0</density>

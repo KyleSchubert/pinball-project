@@ -1,37 +1,64 @@
 package com.pinball.mygame;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.World;
+import com.codeandweb.physicseditor.PhysicsShapeCache;
+
+import static com.pinball.mygame.MyGame.SCALE_FACTOR;
 
 public class Entity {
     private Sprite sprite;
     private Body body;
 
-    public void setBody(Body body) {
+    public final void makeBody(String name, float x, float y, World world, PhysicsShapeCache physicsBodies) {
+        Body body = physicsBodies.createBody(name, world, SCALE_FACTOR, SCALE_FACTOR);
+        body.setTransform(x, y, 0);
         this.body = body;
     }
 
-    public void setSprite(Sprite sprite) {
+    public final void makeSprite(String texture, int width, int height) {
+        Texture spriteTexture = new Texture(texture);
+        Sprite sprite = new Sprite(spriteTexture, 0, 0, width, height); // MIGHT be a performance problem
+        sprite.setScale(SCALE_FACTOR);
+        sprite.setOrigin(0, 0);
         this.sprite = sprite;
     }
 
-    public Body getBody() {
+    protected final Body getBody() {
         return body;
     }
 
-    public Sprite getSprite() {
+    protected final Sprite getSprite() {
         return sprite;
     }
 
-    public float getX() {
+    protected final float getX() {
         return this.body.getPosition().x;
     }
 
-    public float getY() {
+    protected final float getY() {
         return this.body.getPosition().y;
     }
 
-    public float getDegrees() {
+    protected final float getDegrees() {
         return (float) Math.toDegrees(this.body.getAngle());
+    }
+
+    public final void setId(String string) {
+        this.body.setUserData(string);
+    }
+
+    public final Object getId() {
+        return this.body.getUserData();
+    }
+
+    public final void drawEntity(SpriteBatch batch) {
+        this.sprite.setPosition(getX(), getY());
+        this.sprite.setRotation(getDegrees());
+        this.sprite.setOrigin(0, 0);
+        this.sprite.draw(batch);
     }
 }

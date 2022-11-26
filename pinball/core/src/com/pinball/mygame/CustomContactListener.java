@@ -3,6 +3,7 @@ package com.pinball.mygame;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class CustomContactListener implements ContactListener {
+
     @Override
     public void beginContact(Contact contact) {
         Fixture fixtureA = contact.getFixtureA();

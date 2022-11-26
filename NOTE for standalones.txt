@@ -1,0 +1,2 @@
+I had to do this to re-enable being able to double click the game's .jar standalone to run it:
+https://stackoverflow.com/questions/8511063/how-to-run-jar-file-by-double-click-on-windows-7-64-bit#answer-52960565
