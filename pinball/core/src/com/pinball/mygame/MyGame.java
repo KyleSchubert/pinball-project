@@ -2,6 +2,7 @@ package com.pinball.mygame;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -41,6 +42,9 @@ public class MyGame extends ApplicationAdapter {
     BitmapFont playerScoreFont;
     int playerScoreValue;
     int playerBallsValue;
+    Sound soundOfHittingLoot;
+    Sound soundOfHittingBumper;
+    static final float GLOBAL_VOLUME = 0.5f;
     public static final float ORIGINAL_PUSHER_JOINT_LENGTH = 1 / (8 * SCALE_FACTOR);
 
 	@Override
@@ -124,6 +128,9 @@ public class MyGame extends ApplicationAdapter {
         playerScoreFont = new BitmapFont(Gdx.files.internal("font.fnt"), false);
         playerScoreFont.setUseIntegerPositions(false);
         playerScoreFont.getData().setScale(SCALE_FACTOR, SCALE_FACTOR);
+
+        soundOfHittingLoot = Gdx.audio.newSound(Gdx.files.internal("permanentLoot.mp3"));
+        soundOfHittingBumper = Gdx.audio.newSound(Gdx.files.internal("hitBumper.mp3"));
 	}
 
 	@Override
@@ -143,11 +150,14 @@ public class MyGame extends ApplicationAdapter {
         highScoreFont.draw(batch, scoreBoard.listHighScores(), 42, 40);
         playerScoreFont.draw(batch, "Score: " + playerScoreValue, 42, 20);
         playerScoreFont.draw(batch, "Remaining Balls: " + playerBallsValue, 42, 15);
+        playerScoreFont.draw(batch, "Controls: ", 41, 10);
+        playerScoreFont.draw(batch, "Flippers: L/R Arrow Keys", 42, 8);
+        playerScoreFont.draw(batch, "Plunger: hold Space Bar", 42, 6);
 
 		batch.end();
 
         // DEBUG WIREFRAME:
-        debugRenderer.render(world, camera.combined);
+        //debugRenderer.render(world, camera.combined);
 	}
 
     @Override
@@ -163,6 +173,7 @@ public class MyGame extends ApplicationAdapter {
         debugRenderer.dispose();
         highScoreFont.dispose();
         playerScoreFont.dispose();
+        soundOfHittingLoot.dispose();
 	}
 
     // START SUGGESTED CODE FROM -> https://www.codeandweb.com/physicseditor/tutorials/libgdx-physics
@@ -195,12 +206,14 @@ public class MyGame extends ApplicationAdapter {
                 playerScoreValue += 100;
                 for (Bumper bumper : allBumpers) {
                     if (bumper.getId().differentiatingFactor().equals(pinball.getId().differentiatingFactor())) {
+                        soundOfHittingBumper.play(GLOBAL_VOLUME);
                         pinball.executeBump(bumper);
                         break;
                     }
                 }
             }
             else if (pinball.isGettingLoot()) {
+                soundOfHittingLoot.play(GLOBAL_VOLUME);
                 playerScoreValue += pinball.calculatePointsLoot();
             }
             world.step(STEP_TIME, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
