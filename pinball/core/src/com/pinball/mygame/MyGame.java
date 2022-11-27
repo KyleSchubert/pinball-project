@@ -3,14 +3,22 @@ package com.pinball.mygame;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Box2D;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.codeandweb.physicseditor.PhysicsShapeCache;
 
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MyGame extends ApplicationAdapter {
 	private OrthographicCamera camera;
@@ -34,6 +42,10 @@ public class MyGame extends ApplicationAdapter {
     Bumper bumper3;
     Bumper bumper4;
     ArrayList<Bumper> allBumpers = new ArrayList<>();
+    ScoreBoard scoreBoard;
+    BitmapFont highScoreFont;
+    BitmapFont playerScoreFont;
+    int playerScoreValue;
     public static final float ORIGINAL_PUSHER_JOINT_LENGTH = 1 / (8 * SCALE_FACTOR);
 
 	@Override
@@ -74,6 +86,37 @@ public class MyGame extends ApplicationAdapter {
         allBumpers.add(bumper4);
 
         world.setContactListener(new CustomContactListener());
+
+        scoreBoard = new ScoreBoard();
+        try (Scanner scoreInput = new Scanner(Paths.get("scores.txt"))) {
+            String potentialScoreString;
+            String regexPatternString = "(.+)\\s+(\\d+)\\s+(.+)";
+            Pattern regexPatten = Pattern.compile(regexPatternString);
+            Matcher matches;
+            while (scoreInput.hasNextLine()) {
+                potentialScoreString = scoreInput.nextLine();
+                matches = regexPatten.matcher(potentialScoreString);
+                if (matches.find()) {
+                    String[] someScoreParams = {matches.group(1), matches.group(3), matches.group(2)};
+                    Score someScore = new Score(someScoreParams);
+                    scoreBoard.add(someScore);
+                }
+            }
+            scoreBoard.listHighScores();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        playerScoreValue = 0;
+
+        highScoreFont = new BitmapFont(Gdx.files.internal("font.fnt"), false);
+        highScoreFont.setUseIntegerPositions(false);
+        highScoreFont.getData().setScale(SCALE_FACTOR / 1.6f, SCALE_FACTOR / 1.6f);
+
+        playerScoreFont = new BitmapFont(Gdx.files.internal("font.fnt"), false);
+        playerScoreFont.setUseIntegerPositions(false);
+        playerScoreFont.getData().setScale(SCALE_FACTOR, SCALE_FACTOR);
 	}
 
 	@Override
@@ -91,6 +134,8 @@ public class MyGame extends ApplicationAdapter {
         for (Bumper bumper : allBumpers) {
             bumper.drawAnimation(batch, timeElapsed);
         }
+        highScoreFont.draw(batch, scoreBoard.listHighScores(), 42, 40);
+        playerScoreFont.draw(batch, "Score: " + playerScoreValue, 42, 20);
 
 		batch.end();
 
@@ -109,6 +154,8 @@ public class MyGame extends ApplicationAdapter {
 		batch.dispose();
         world.dispose();
         debugRenderer.dispose();
+        highScoreFont.dispose();
+        playerScoreFont.dispose();
 	}
 
     // START SUGGESTED CODE FROM -> https://www.codeandweb.com/physicseditor/tutorials/libgdx-physics
@@ -129,6 +176,7 @@ public class MyGame extends ApplicationAdapter {
                 pinball.respawn(world, physicsBodies);
             }
             else if (pinball.isBumped()) {
+                playerScoreValue += 100;
                 for (Bumper bumper : allBumpers) {
                     if (bumper.getId().differentiatingFactor().equals(pinball.getId().differentiatingFactor())) {
                         pinball.executeBump(bumper);
