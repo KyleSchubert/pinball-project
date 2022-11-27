@@ -30,6 +30,10 @@ public class Pinball extends Entity {
         return this.getId().entityType().equals("bumpedPinball");
     }
 
+    public boolean isThroughOneWayLineTrigger() {
+        return this.getId().differentiatingFactor().equals("passedOneWayLineTrigger");
+    }
+
     public void executeBump(Bumper bumper) {
         Vector2 directionVector = this.getBody().getWorldCenter().sub(bumper.getBody().getWorldCenter());
         this.getBody().applyForceToCenter(directionVector.nor().scl(12000), true);

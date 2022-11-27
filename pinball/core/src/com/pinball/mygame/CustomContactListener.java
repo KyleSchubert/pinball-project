@@ -4,7 +4,7 @@ import com.badlogic.gdx.physics.box2d.*;
 
 import java.util.Arrays;
 
-import static com.pinball.mygame.MyGame.pinball;
+import static com.pinball.mygame.MyGame.*;
 
 public class CustomContactListener implements ContactListener {
 
@@ -25,6 +25,9 @@ public class CustomContactListener implements ContactListener {
         }
         else if (checkFor(fixtureA, fixtureB, "pinball", "permanentLoot")) {
             pinball.setId("lootingPinball", getNonPinballEntityData(fixtureA, fixtureB).differentiatingFactor());
+        }
+        else if (checkFor(fixtureA, fixtureB, "pinball", "one way line TRIGGER")) {
+            pinball.setId("pinball", "passedOneWayLineTrigger");
         }
     }
 

@@ -14,7 +14,9 @@ public class Board  {
     }
 
     public void drawBoard(SpriteBatch batch) {
-        pieces.forEach((piece) -> piece.drawEntity(batch));
+        pieces.stream()
+                .filter(piece -> piece.shouldBeDrawn()).
+                forEach(piece -> piece.drawEntity(batch));
     }
 
     public BoardPiece addNewPiece(World world, PhysicsShapeCache physicsBodies, float spawnX, float spawnY,

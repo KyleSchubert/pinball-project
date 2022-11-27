@@ -17,7 +17,7 @@ public class Entity {
         BOTTOM(0), RIGHT(1.57f), TOP(3.14f), LEFT(4.71f);
 
         private final float radians;
-        private RotationRadians(float radians) {
+        RotationRadians(float radians) {
             this.radians = radians;
         }
 
@@ -50,6 +50,14 @@ public class Entity {
         sprite.setScale(SCALE_FACTOR);
         sprite.setOrigin(0, 0);
         this.sprite = sprite;
+    }
+
+    public void disableBody() {
+        this.body.setActive(false);
+    }
+
+    public void enableBody() {
+        this.body.setActive(true);
     }
 
     protected final Body getBody() {

@@ -30,6 +30,8 @@ public class MyGame extends ApplicationAdapter {
     PhysicsShapeCache physicsBodies;
     public static Pinball pinball;
     Board board;
+    public static BoardPiece oneWayLine;
+    public static BoardPiece oneWayLineTrigger;
     BoardPiece pinballBoard;
     BoardPiece leftFlipperArea;
     BoardPiece rightFlipperArea;
@@ -66,6 +68,17 @@ public class MyGame extends ApplicationAdapter {
         board.addNewPiece(world, physicsBodies, 12.3f, -3, "despawn line.png",
                 247, 14, "despawn line", "despawn line", "bottom despawn line");
 
+        // The line at the exit of the pusher area that prevents you from going back in there from the board
+        oneWayLine = board.addNewPiece(world, physicsBodies, 34.2f, 41.1f, "one way line.png",
+                5, 61, "one way line", "one way line");
+        oneWayLine.disableBody();
+
+
+        oneWayLineTrigger = board.addNewPiece(world, physicsBodies, 29, 39, "one way line TRIGGER.png",
+                117, 117, "one way line TRIGGER", "one way line TRIGGER");
+        oneWayLineTrigger.disableDrawing();
+
+
         // Pinball board (the outside-most solid parts of the board)
         pinballBoard = board.addNewPiece(world, physicsBodies, 0, 0, "pinball board v2.png",
                 800, 900, "pinball board", "generic boardPiece");
@@ -92,10 +105,14 @@ public class MyGame extends ApplicationAdapter {
                 "right paddle", "right paddle", rightFlipperArea, false);
 
         // Bumpers 1 through 4
-        allBumpers.add(new Bumper(world, physicsBodies, 12, 30, "1"));
-        allBumpers.add(new Bumper(world, physicsBodies, 17, 35, "2"));
-        allBumpers.add(new Bumper(world, physicsBodies, 22, 30, "3"));
-        allBumpers.add(new Bumper(world, physicsBodies, 17, 25, "4"));
+        allBumpers.add(new Bumper(world, physicsBodies, 10, 30, "1"));
+        allBumpers.add(new Bumper(world, physicsBodies, 17, 37, "2"));
+        allBumpers.add(new Bumper(world, physicsBodies, 24, 30, "3"));
+        allBumpers.add(new Bumper(world, physicsBodies, 17, 23, "4"));
+        allBumpers.add(new Bumper(world, physicsBodies, 14.5f, 32.5f, "5"));
+        allBumpers.add(new Bumper(world, physicsBodies, 19.5f, 32.5f, "6"));
+        allBumpers.add(new Bumper(world, physicsBodies, 14.5f, 27.5f, "7"));
+        allBumpers.add(new Bumper(world, physicsBodies, 19.5f, 27.5f, "8"));
 
         world.setContactListener(new CustomContactListener());
 
@@ -191,8 +208,11 @@ public class MyGame extends ApplicationAdapter {
             rightPaddle.keyCheck();
             leftPaddle.keyCheck();
             if (pinball.isDead()) {
-                if (playerBallsValue-- > 0) {
+                if (playerBallsValue > 0) {
+                    playerBallsValue--;
                     pinball.respawn(world, physicsBodies);
+                    oneWayLineTrigger.enableBody();
+                    oneWayLine.disableBody();
                 }
                 else {
                     // game over
@@ -215,6 +235,10 @@ public class MyGame extends ApplicationAdapter {
             else if (pinball.isGettingLoot()) {
                 soundOfHittingLoot.play(GLOBAL_VOLUME);
                 playerScoreValue += pinball.calculatePointsLoot();
+            }
+            else if (pinball.isThroughOneWayLineTrigger()) {
+                oneWayLineTrigger.disableBody();
+                oneWayLine.enableBody();
             }
             world.step(STEP_TIME, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
             return STEP_TIME;

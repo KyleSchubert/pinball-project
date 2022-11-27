@@ -4,6 +4,12 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.codeandweb.physicseditor.PhysicsShapeCache;
 
 public class BoardPiece extends Entity {
+    private boolean shouldBeDrawn = true;
+
+    public boolean shouldBeDrawn() {
+        return shouldBeDrawn;
+    }
+
     public enum PermanentLootType {
         SMALL, MEDIUM, LARGE
     }
@@ -26,5 +32,9 @@ public class BoardPiece extends Entity {
         this.makeBody(physicsName, spawnX, spawnY, rotationRadians.getRadians(), world, physicsBodies);
         this.makeSprite(textureFile, width, height);
         this.setId(entityType, physicsName);
+    }
+
+    public void disableDrawing() {
+        this.shouldBeDrawn = false;
     }
 }
