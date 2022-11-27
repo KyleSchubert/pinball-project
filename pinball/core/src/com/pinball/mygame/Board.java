@@ -10,7 +10,7 @@ public class Board  {
     private final ArrayList<BoardPiece> pieces = new ArrayList<>();
 
     public void add(final BoardPiece piece) {
-        if (isIdAlreadyInUse((String) piece.getId())) {
+        if (isIdAlreadyInUse(piece.getId())) {
             System.out.printf("[Should not happen]: a duplicate piece was trying to join the Board. (id: %s)",
                     piece.getId());
         }
@@ -19,7 +19,7 @@ public class Board  {
         }
     }
 
-    private boolean isIdAlreadyInUse(String pieceId) {
+    private boolean isIdAlreadyInUse(EntityData pieceId) {
         return pieces.stream().anyMatch((somePiece) -> somePiece.getId().equals(pieceId));
     }
 
@@ -29,7 +29,7 @@ public class Board  {
 
     public void addNewPiece(World world, PhysicsShapeCache physicsBodies, float spawnX, float spawnY,
                        String textureFile, int width, int height, String physicsName, String id) {
-        if (isIdAlreadyInUse(id)) {
+        if (isIdAlreadyInUse(new EntityData("boardPiece", id))) {
             System.out.printf("[Should not happen]: a duplicate piece was prevented from being made. (id: %s)", id);
         }
         else {
@@ -40,7 +40,7 @@ public class Board  {
 
     public BoardPiece addNewPiece(World world, PhysicsShapeCache physicsBodies, float spawnX, float spawnY,
                       String textureFile, int width, int height, String physicsName) {
-        if (isIdAlreadyInUse(physicsName)) {
+        if (isIdAlreadyInUse(new EntityData("boardPiece", physicsName))) {
             System.out.printf("[Should not happen]: a duplicate piece was prevented from being made. (id: %s)", physicsName);
             return null;
         }

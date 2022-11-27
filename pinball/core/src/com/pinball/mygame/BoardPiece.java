@@ -8,13 +8,13 @@ public class BoardPiece extends Entity {
                       String textureFile, int width, int height, String physicsName, String id) {
         this.makeBody(physicsName, spawnX, spawnY, world, physicsBodies);
         this.makeSprite(textureFile, width, height);
-        this.setId(id);
+        this.setId("boardPiece", id);
     }
 
     public BoardPiece(World world, PhysicsShapeCache physicsBodies, float spawnX, float spawnY,
                       String textureFile, int width, int height, String physicsName) {
         this.makeBody(physicsName, spawnX, spawnY, world, physicsBodies);
         this.makeSprite(textureFile, width, height);
-        this.setId(physicsName);
+        this.setId("boardPiece", physicsName);
     }
 }

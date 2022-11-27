@@ -10,6 +10,8 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.codeandweb.physicseditor.PhysicsShapeCache;
 
+import java.util.ArrayList;
+
 public class MyGame extends ApplicationAdapter {
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
@@ -18,7 +20,7 @@ public class MyGame extends ApplicationAdapter {
     public static final float SCALE_FACTOR = 0.05f;
     Box2DDebugRenderer debugRenderer;
     PhysicsShapeCache physicsBodies;
-    Pinball pinball;
+    public static Pinball pinball;
     Board board;
     BoardPiece despawnLine;
     BoardPiece pinballBoard;
@@ -27,6 +29,11 @@ public class MyGame extends ApplicationAdapter {
     Pusher pusher;
     Flipper leftPaddle;
     Flipper rightPaddle;
+    Bumper bumper1;
+    Bumper bumper2;
+    Bumper bumper3;
+    Bumper bumper4;
+    ArrayList<Bumper> allBumpers = new ArrayList<>();
     public static final float ORIGINAL_PUSHER_JOINT_LENGTH = 1 / (8 * SCALE_FACTOR);
 
 	@Override
@@ -57,6 +64,14 @@ public class MyGame extends ApplicationAdapter {
                 "left paddle", "left paddle", leftFlipperArea, true);
         rightPaddle = new Flipper(world, physicsBodies, 30, 7, "right paddle.png",
                 "right paddle", "right paddle", rightFlipperArea, false);
+        bumper1 = new Bumper(world, physicsBodies, 12, 30, "1");
+        allBumpers.add(bumper1);
+        bumper2 = new Bumper(world, physicsBodies, 17, 35, "2");
+        allBumpers.add(bumper2);
+        bumper3 = new Bumper(world, physicsBodies, 22, 30, "3");
+        allBumpers.add(bumper3);
+        bumper4 = new Bumper(world, physicsBodies, 17, 25, "4");
+        allBumpers.add(bumper4);
 
         world.setContactListener(new CustomContactListener());
 	}
@@ -64,15 +79,18 @@ public class MyGame extends ApplicationAdapter {
 	@Override
 	public void render () {
 		ScreenUtils.clear(0.36f, 0.4f, 0.45f, 1);
-        stepWorld();
+        float timeElapsed = stepWorld();
 		batch.begin();
 
         rightPaddle.drawEntity(batch);
         leftPaddle.drawEntity(batch);
         despawnLine.drawEntity(batch);
         pusher.drawEntity(batch);
-        board.drawBoard(batch);
         pinball.drawEntity(batch);
+        board.drawBoard(batch);
+        for (Bumper bumper : allBumpers) {
+            bumper.drawAnimation(batch, timeElapsed);
+        }
 
 		batch.end();
 
@@ -99,7 +117,7 @@ public class MyGame extends ApplicationAdapter {
     static final int POSITION_ITERATIONS = 2;
 
     float accumulator = 0;
-    private void stepWorld() {
+    private float stepWorld() {
         float delta = Gdx.graphics.getDeltaTime();
         accumulator += Math.min(delta, 0.25f);
         if (accumulator >= STEP_TIME) {
@@ -110,8 +128,18 @@ public class MyGame extends ApplicationAdapter {
             if (pinball.isDead()) {
                 pinball.respawn(world, physicsBodies);
             }
+            else if (pinball.isBumped()) {
+                for (Bumper bumper : allBumpers) {
+                    if (bumper.getId().differentiatingFactor().equals(pinball.getId().differentiatingFactor())) {
+                        pinball.executeBump(bumper);
+                        break;
+                    }
+                }
+            }
             world.step(STEP_TIME, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+            return STEP_TIME;
         }
+        else { return 0; }
     }
     // END SUGGESTED CODE FROM -> https://www.codeandweb.com/physicseditor/tutorials/libgdx-physics
 }

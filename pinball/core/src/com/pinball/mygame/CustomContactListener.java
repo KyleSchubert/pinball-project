@@ -2,6 +2,10 @@ package com.pinball.mygame;
 
 import com.badlogic.gdx.physics.box2d.*;
 
+import java.util.Arrays;
+
+import static com.pinball.mygame.MyGame.pinball;
+
 public class CustomContactListener implements ContactListener {
 
     @Override
@@ -14,7 +18,10 @@ public class CustomContactListener implements ContactListener {
         System.out.println(fixtureA.getBody().getUserData() + " <-- touched --> " + fixtureB.getBody().getUserData());
 
         if (checkFor(fixtureA, fixtureB, "pinball", "despawn line")) {
-            getPinballFixture(fixtureA, fixtureB).getBody().setUserData("pinball dead");
+            pinball.setId("pinball", "dead");
+        }
+        else if (checkFor(fixtureA, fixtureB, "pinball", "bumper")) {
+            pinball.setId("bumpedPinball", getNonPinballEntityData(fixtureA, fixtureB).differentiatingFactor());
         }
     }
 
@@ -37,19 +44,34 @@ public class CustomContactListener implements ContactListener {
 
     }
 
-    private boolean checkFor(Fixture fixtureA, Fixture fixtureB, String userData1, String userData2) {
-        String string1 = fixtureA.getBody().getUserData().toString();
-        String string2 = fixtureB.getBody().getUserData().toString();
-        return string1.equals(userData1) && string2.equals(userData2)
-                || (string1.equals(userData2) && string2.equals(userData1));
+    /**
+     * Checks for contact between the two types of entities by reading information from the fixtures.
+     * @param fixtureA comes from contact.getFixtureA()
+     * @param fixtureB comes from contact.getFixtureB()
+     * @param entityType1 a type like "pinball", "bumper", "despawn line", etc. From EntityData class or Entity.getId()
+     * @param entityType2 a type like "pinball", "bumper", "despawn line", etc. From EntityData class or Entity.getId()
+     * @return returns a boolean about if contact occurred between those two types of Entities.
+     */
+    private boolean checkFor(Fixture fixtureA, Fixture fixtureB, String entityType1, String entityType2) {
+        EntityData entityData1 = (EntityData) fixtureA.getBody().getUserData();
+        EntityData entityData2 = (EntityData) fixtureB.getBody().getUserData();
+        String realEntityType1 = entityData1.entityType();
+        String realEntityType2 = entityData2.entityType();
+        String realEntityDF1 = entityData1.differentiatingFactor();
+        String realEntityDF2 = entityData2.differentiatingFactor();
+        boolean check1 = Arrays.asList(realEntityType1, realEntityType2, realEntityDF1, realEntityDF2).contains(entityType1);
+        boolean check2 = Arrays.asList(realEntityType1, realEntityType2, realEntityDF1, realEntityDF2).contains(entityType2);
+        return check1 && check2;
     }
 
-    private Fixture getPinballFixture(Fixture fixtureA, Fixture fixtureB) {
-        if (fixtureA.getBody().getUserData().toString().equals("pinball")) {
-            return fixtureA;
+    private EntityData getNonPinballEntityData(Fixture fixtureA, Fixture fixtureB) {
+        EntityData entityData1 = (EntityData) fixtureA.getBody().getUserData();
+        EntityData entityData2 = (EntityData) fixtureB.getBody().getUserData();
+        if (entityData1.entityType().equals("pinball")) {
+            return entityData2;
         }
         else {
-            return fixtureB;
+            return entityData1;
         }
     }
 }

@@ -47,15 +47,16 @@ public class Entity {
         return (float) Math.toDegrees(this.body.getAngle());
     }
 
-    public final void setId(String string) {
-        this.body.setUserData(string);
+    public final void setId(String entityType, String differentiatingFactor) {
+        EntityData entityData = new EntityData(entityType, differentiatingFactor);
+        this.body.setUserData(entityData);
     }
 
-    public final Object getId() {
-        return this.body.getUserData();
+    public final EntityData getId() {
+        return (EntityData) this.body.getUserData();
     }
 
-    public final void drawEntity(SpriteBatch batch) {
+    public void drawEntity(SpriteBatch batch) {
         this.sprite.setPosition(getX(), getY());
         this.sprite.setRotation(getDegrees());
         this.sprite.setOrigin(0, 0);
