@@ -170,7 +170,7 @@ public class MyGame extends ApplicationAdapter {
 		batch.end();
 
         // DEBUG WIREFRAME:
-        debugRenderer.render(world, camera.combined);
+        //debugRenderer.render(world, camera.combined);
 	}
 
     @Override

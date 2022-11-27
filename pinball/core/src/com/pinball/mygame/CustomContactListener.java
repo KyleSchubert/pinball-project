@@ -15,7 +15,7 @@ public class CustomContactListener implements ContactListener {
 
         if (fixtureA == null || fixtureB == null) return;
         if (fixtureA.getBody().getUserData() == null || fixtureB.getBody().getUserData() == null) return;
-        System.out.println(fixtureA.getBody().getUserData() + " <-- touched --> " + fixtureB.getBody().getUserData());
+        //System.out.println(fixtureA.getBody().getUserData() + " <-- touched --> " + fixtureB.getBody().getUserData());
 
         if (checkFor(fixtureA, fixtureB, "pinball", "despawn line")) {
             pinball.setId("pinball", "dead");
