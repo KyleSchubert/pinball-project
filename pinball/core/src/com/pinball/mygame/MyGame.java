@@ -2,6 +2,7 @@ package com.pinball.mygame;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,8 +14,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.codeandweb.physicseditor.PhysicsShapeCache;
 
-import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -88,25 +87,22 @@ public class MyGame extends ApplicationAdapter {
         world.setContactListener(new CustomContactListener());
 
         scoreBoard = new ScoreBoard();
-        try (Scanner scoreInput = new Scanner(Paths.get("scores.txt"))) {
-            String potentialScoreString;
-            String regexPatternString = "(.+)\\s+(\\d+)\\s+(.+)";
-            Pattern regexPatten = Pattern.compile(regexPatternString);
-            Matcher matches;
-            while (scoreInput.hasNextLine()) {
-                potentialScoreString = scoreInput.nextLine();
-                matches = regexPatten.matcher(potentialScoreString);
-                if (matches.find()) {
-                    String[] someScoreParams = {matches.group(1), matches.group(3), matches.group(2)};
-                    Score someScore = new Score(someScoreParams);
-                    scoreBoard.add(someScore);
-                }
+        FileHandle file = Gdx.files.internal("scores.txt");
+        Scanner scoreInput = new Scanner(file.read());
+        String potentialScoreString;
+        String regexPatternString = "(.+)\\s+(\\d+)\\s+(.+)";
+        Pattern regexPatten = Pattern.compile(regexPatternString);
+        Matcher matches;
+        while (scoreInput.hasNextLine()) {
+            potentialScoreString = scoreInput.nextLine();
+            matches = regexPatten.matcher(potentialScoreString);
+            if (matches.find()) {
+                String[] someScoreParams = {matches.group(1), matches.group(3), matches.group(2)};
+                Score someScore = new Score(someScoreParams);
+                scoreBoard.add(someScore);
             }
-            scoreBoard.listHighScores();
         }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        scoreBoard.listHighScores();
 
         playerScoreValue = 0;
 
