@@ -45,6 +45,12 @@ public class MyGame extends ApplicationAdapter {
     BitmapFont highScoreFont;
     BitmapFont playerScoreFont;
     int playerScoreValue;
+    int playerBallsValue;
+    BoardPiece permanentLoot1;
+    BoardPiece permanentLoot2;
+    BoardPiece permanentLoot3;
+    BoardPiece permanentLoot4;
+    BoardPiece permanentLoot5;
     public static final float ORIGINAL_PUSHER_JOINT_LENGTH = 1 / (8 * SCALE_FACTOR);
 
 	@Override
@@ -62,13 +68,39 @@ public class MyGame extends ApplicationAdapter {
         // added noise of   17, 12, 26
         board = new Board();
         despawnLine = board.addNewPiece(world, physicsBodies, 12.3f, -3, "despawn line.png",
-                247, 14, "despawn line");
+                247, 14, "despawn line", "despawn line", "bottom despawn line");
         pinballBoard = board.addNewPiece(world, physicsBodies, 0, 0, "pinball board v2.png",
-                800, 900, "pinball board");
+                800, 900, "pinball board", "generic boardPiece");
         leftFlipperArea = board.addNewPiece(world, physicsBodies, 0, 0, "pinball board paddle area v2.png",
-                800, 900, "pinball board left paddle area");
+                800, 900, "pinball board left paddle area", "generic boardPiece");
         rightFlipperArea = board.addNewPiece(world, physicsBodies, 0, 0, "pinball board paddle area2 v2.png",
-                800, 900, "pinball board right paddle area");
+                800, 900, "pinball board right paddle area", "generic boardPiece");
+
+        permanentLoot1 = new BoardPiece(world, physicsBodies, 0, 0, "permanentLoot1.png",
+                46, 36, "permanentLoot1", "permanentLoot");
+        permanentLoot1.rotate("permanentLoot1", 4.5f, 19.5f, 4.71f, world, physicsBodies);
+        board.add(permanentLoot1);
+
+        permanentLoot2 = new BoardPiece(world, physicsBodies, 0, 0, "permanentLoot1.png",
+                46, 36, "permanentLoot1", "permanentLoot");
+        permanentLoot2.rotate("permanentLoot1", 31.2f, 17.2f, 1.57f, world, physicsBodies);
+        board.add(permanentLoot2);
+
+        permanentLoot3 = new BoardPiece(world, physicsBodies, 0, 0, "permanentLoot2.png",
+                65, 53, "permanentLoot2", "permanentLoot");
+        permanentLoot3.rotate("permanentLoot2", 1.6f, 35, 4.71f, world, physicsBodies);
+        board.add(permanentLoot3);
+
+        permanentLoot4 = new BoardPiece(world, physicsBodies, 0, 0, "permanentLoot2.png",
+                65, 53, "permanentLoot2", "permanentLoot");
+        permanentLoot4.rotate("permanentLoot2", 34.1f, 31.8f, 1.57f, world, physicsBodies);
+        board.add(permanentLoot4);
+
+        permanentLoot5 = new BoardPiece(world, physicsBodies, 0, 0, "permanentLoot3.png",
+                108, 78, "permanentLoot3", "permanentLoot");
+        permanentLoot5.rotate("permanentLoot3", 21, 44, 3.14f, world, physicsBodies);
+        board.add(permanentLoot5);
+
 
         pusher = new Pusher(world, physicsBodies, 37.8f, 7, "pusher", pinballBoard);
         leftPaddle = new Flipper(world, physicsBodies, 12.5f, 4.5f, "left paddle.png",
@@ -105,6 +137,7 @@ public class MyGame extends ApplicationAdapter {
         scoreBoard.listHighScores();
 
         playerScoreValue = 0;
+        playerBallsValue = 2;
 
         highScoreFont = new BitmapFont(Gdx.files.internal("font.fnt"), false);
         highScoreFont.setUseIntegerPositions(false);
@@ -132,6 +165,7 @@ public class MyGame extends ApplicationAdapter {
         }
         highScoreFont.draw(batch, scoreBoard.listHighScores(), 42, 40);
         playerScoreFont.draw(batch, "Score: " + playerScoreValue, 42, 20);
+        playerScoreFont.draw(batch, "Remaining Balls: " + playerBallsValue, 42, 15);
 
 		batch.end();
 
@@ -169,7 +203,16 @@ public class MyGame extends ApplicationAdapter {
             rightPaddle.keyCheck();
             leftPaddle.keyCheck();
             if (pinball.isDead()) {
-                pinball.respawn(world, physicsBodies);
+                if (playerBallsValue-- > 0) {
+                    pinball.respawn(world, physicsBodies);
+                }
+                else {
+                    // game over
+                    String[] scoreArgs = {"YOUR", "SCORE", Integer.toString(playerScoreValue)};
+                    Score playerScore = new Score(scoreArgs);
+                    scoreBoard.add(playerScore);
+                    pinball.setId("pinball", "completely dead");
+                }
             }
             else if (pinball.isBumped()) {
                 playerScoreValue += 100;
@@ -179,6 +222,9 @@ public class MyGame extends ApplicationAdapter {
                         break;
                     }
                 }
+            }
+            else if (pinball.isGettingLoot()) {
+                playerScoreValue += pinball.calculatePointsLoot();
             }
             world.step(STEP_TIME, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
             return STEP_TIME;

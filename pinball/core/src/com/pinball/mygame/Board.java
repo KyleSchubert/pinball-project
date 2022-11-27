@@ -10,44 +10,24 @@ public class Board  {
     private final ArrayList<BoardPiece> pieces = new ArrayList<>();
 
     public void add(final BoardPiece piece) {
-        if (isIdAlreadyInUse(piece.getId())) {
-            System.out.printf("[Should not happen]: a duplicate piece was trying to join the Board. (id: %s)",
-                    piece.getId());
-        }
-        else {
-            pieces.add(piece);
-        }
-    }
-
-    private boolean isIdAlreadyInUse(EntityData pieceId) {
-        return pieces.stream().anyMatch((somePiece) -> somePiece.getId().equals(pieceId));
+        pieces.add(piece);
     }
 
     public void drawBoard(SpriteBatch batch) {
         pieces.forEach((piece) -> piece.drawEntity(batch));
     }
 
-    public void addNewPiece(World world, PhysicsShapeCache physicsBodies, float spawnX, float spawnY,
-                       String textureFile, int width, int height, String physicsName, String id) {
-        if (isIdAlreadyInUse(new EntityData("boardPiece", id))) {
-            System.out.printf("[Should not happen]: a duplicate piece was prevented from being made. (id: %s)", id);
-        }
-        else {
-            BoardPiece piece = new BoardPiece(world, physicsBodies, spawnX, spawnY, textureFile, width, height, physicsName, id);
-            pieces.add(piece);
-        }
+    public BoardPiece addNewPiece(World world, PhysicsShapeCache physicsBodies, float spawnX, float spawnY,
+                       String textureFile, int width, int height, String physicsName, String entityType, String id) {
+        BoardPiece piece = new BoardPiece(world, physicsBodies, spawnX, spawnY, textureFile, width, height, physicsName, entityType, id);
+        pieces.add(piece);
+        return piece;
     }
 
     public BoardPiece addNewPiece(World world, PhysicsShapeCache physicsBodies, float spawnX, float spawnY,
-                      String textureFile, int width, int height, String physicsName) {
-        if (isIdAlreadyInUse(new EntityData("boardPiece", physicsName))) {
-            System.out.printf("[Should not happen]: a duplicate piece was prevented from being made. (id: %s)", physicsName);
-            return null;
-        }
-        else {
-            BoardPiece piece = new BoardPiece(world, physicsBodies, spawnX, spawnY, textureFile, width, height, physicsName);
-            pieces.add(piece);
-            return piece;
-        }
+                      String textureFile, int width, int height, String physicsName, String entityType) {
+        BoardPiece piece = new BoardPiece(world, physicsBodies, spawnX, spawnY, textureFile, width, height, physicsName, entityType);
+        pieces.add(piece);
+        return piece;
     }
 }

@@ -23,6 +23,9 @@ public class CustomContactListener implements ContactListener {
         else if (checkFor(fixtureA, fixtureB, "pinball", "bumper")) {
             pinball.setId("bumpedPinball", getNonPinballEntityData(fixtureA, fixtureB).differentiatingFactor());
         }
+        else if (checkFor(fixtureA, fixtureB, "pinball", "permanentLoot")) {
+            pinball.setId("lootingPinball", getNonPinballEntityData(fixtureA, fixtureB).differentiatingFactor());
+        }
     }
 
     @Override

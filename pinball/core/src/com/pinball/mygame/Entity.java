@@ -14,8 +14,20 @@ public class Entity {
     private Body body;
 
     public final void makeBody(String name, float x, float y, World world, PhysicsShapeCache physicsBodies) {
+        if (body != null) {
+            world.destroyBody(body);
+        }
         Body body = physicsBodies.createBody(name, world, SCALE_FACTOR, SCALE_FACTOR);
         body.setTransform(x, y, 0);
+        this.body = body;
+    }
+
+    public final void makeBody(String name, float x, float y, float angle, World world, PhysicsShapeCache physicsBodies) {
+        if (body != null) {
+            world.destroyBody(body);
+        }
+        Body body = physicsBodies.createBody(name, world, SCALE_FACTOR, SCALE_FACTOR);
+        body.setTransform(x, y, angle);
         this.body = body;
     }
 

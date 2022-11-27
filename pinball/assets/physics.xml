@@ -191,6 +191,56 @@
 		</fixture>
 	</body>
 
+	<body name="permanentLoot1">
+		<linear_damping>0</linear_damping>
+		<angular_damping>0</angular_damping>
+		<allow_sleep/>
+		<fixture>
+			<density>2</density>
+			<friction>0</friction>
+			<restitution>0</restitution>
+			<filter_category_bits>1</filter_category_bits>
+			<filter_mask_bits>65535</filter_mask_bits>
+			<filter_group_index>0</filter_group_index>
+			<is_sensor/>
+			<polygon>46.0000, 0.0000, 33.0000, 34.0000, 7.0000, 35.0000, 0.0000, 0.0000</polygon>
+		</fixture>
+	</body>
+
+	<body name="permanentLoot2">
+		<linear_damping>0</linear_damping>
+		<angular_damping>0</angular_damping>
+		<allow_sleep/>
+		<fixture>
+			<density>2</density>
+			<friction>0</friction>
+			<restitution>0</restitution>
+			<filter_category_bits>1</filter_category_bits>
+			<filter_mask_bits>65535</filter_mask_bits>
+			<filter_group_index>0</filter_group_index>
+			<is_sensor/>
+			<polygon>65.0000, 0.0000, 30.0000, 51.0000, 20.0000, 53.0000, 1.0000, 25.0000, 0.0000, 0.0000</polygon>
+		</fixture>
+	</body>
+
+	<body name="permanentLoot3">
+		<linear_damping>0</linear_damping>
+		<angular_damping>0</angular_damping>
+		<allow_sleep/>
+		<fixture>
+			<density>2</density>
+			<friction>0</friction>
+			<restitution>0</restitution>
+			<filter_category_bits>1</filter_category_bits>
+			<filter_mask_bits>65535</filter_mask_bits>
+			<filter_group_index>0</filter_group_index>
+			<is_sensor/>
+			<polygon>46.0000, 77.5000, 34.0000, 64.0000, 71.0000, 38.0000, 59.0000, 64.0000</polygon>
+			<polygon>0.0000, 0.0000, 107.0000, 0.0000, 71.0000, 38.0000, 34.0000, 64.0000</polygon>
+			<polygon>101.5000, 15.0000, 88.0000, 20.5000, 107.0000, 0.0000</polygon>
+		</fixture>
+	</body>
+
 	<metadata>
 		<format>1</format>
 		<ptm_ratio>32</ptm_ratio>
