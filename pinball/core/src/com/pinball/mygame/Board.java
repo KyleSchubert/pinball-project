@@ -30,4 +30,37 @@ public class Board  {
         pieces.add(piece);
         return piece;
     }
+
+    public void addNewPermanentLoot(BoardPiece.PermanentLootType lootType, World world, PhysicsShapeCache physicsBodies,
+                                    float spawnX, float spawnY, Entity.RotationRadians rotationRadians) {
+        String textureFile, physicsName;
+        String entityType = "permanentLoot";
+        int width, height;
+        switch (lootType) {
+            case LARGE: {
+                textureFile = "permanentLoot3.png";
+                physicsName = "permanentLoot3";
+                width = 108;
+                height = 78;
+                break;
+            }
+            case MEDIUM: {
+                textureFile = "permanentLoot2.png";
+                physicsName = "permanentLoot2";
+                width = 65;
+                height = 53;
+                break;
+            }
+            case SMALL: {
+                textureFile = "permanentLoot1.png";
+                physicsName = "permanentLoot1";
+                width = 46;
+                height = 36;
+                break;
+            }
+            default:
+                return;
+        }
+        pieces.add(new BoardPiece(world, physicsBodies, spawnX, spawnY, textureFile, width, height, physicsName, entityType, rotationRadians));
+    }
 }

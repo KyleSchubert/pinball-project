@@ -13,6 +13,19 @@ public class Entity {
     private Sprite sprite;
     private Body body;
 
+    public enum RotationRadians {
+        BOTTOM(0), RIGHT(1.57f), TOP(3.14f), LEFT(4.71f);
+
+        private final float radians;
+        private RotationRadians(float radians) {
+            this.radians = radians;
+        }
+
+        public float getRadians() {
+            return this.radians;
+        }
+    }
+
     public final void makeBody(String name, float x, float y, World world, PhysicsShapeCache physicsBodies) {
         if (body != null) {
             world.destroyBody(body);

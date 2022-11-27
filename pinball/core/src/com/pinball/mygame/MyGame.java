@@ -29,28 +29,18 @@ public class MyGame extends ApplicationAdapter {
     PhysicsShapeCache physicsBodies;
     public static Pinball pinball;
     Board board;
-    BoardPiece despawnLine;
     BoardPiece pinballBoard;
     BoardPiece leftFlipperArea;
     BoardPiece rightFlipperArea;
     Pusher pusher;
     Flipper leftPaddle;
     Flipper rightPaddle;
-    Bumper bumper1;
-    Bumper bumper2;
-    Bumper bumper3;
-    Bumper bumper4;
     ArrayList<Bumper> allBumpers = new ArrayList<>();
     ScoreBoard scoreBoard;
     BitmapFont highScoreFont;
     BitmapFont playerScoreFont;
     int playerScoreValue;
     int playerBallsValue;
-    BoardPiece permanentLoot1;
-    BoardPiece permanentLoot2;
-    BoardPiece permanentLoot3;
-    BoardPiece permanentLoot4;
-    BoardPiece permanentLoot5;
     public static final float ORIGINAL_PUSHER_JOINT_LENGTH = 1 / (8 * SCALE_FACTOR);
 
 	@Override
@@ -67,54 +57,41 @@ public class MyGame extends ApplicationAdapter {
         // color palette -->  https://coolors.co/7fe57f-000000-5c6672-b8c5d6-f4faff
         // added noise of   17, 12, 26
         board = new Board();
-        despawnLine = board.addNewPiece(world, physicsBodies, 12.3f, -3, "despawn line.png",
+
+        // Despawn line
+        board.addNewPiece(world, physicsBodies, 12.3f, -3, "despawn line.png",
                 247, 14, "despawn line", "despawn line", "bottom despawn line");
+
+        // Pinball board (the outside-most solid parts of the board)
         pinballBoard = board.addNewPiece(world, physicsBodies, 0, 0, "pinball board v2.png",
                 800, 900, "pinball board", "generic boardPiece");
+
+        // Left flipper area
         leftFlipperArea = board.addNewPiece(world, physicsBodies, 0, 0, "pinball board paddle area v2.png",
                 800, 900, "pinball board left paddle area", "generic boardPiece");
+
+        // Right flipper area
         rightFlipperArea = board.addNewPiece(world, physicsBodies, 0, 0, "pinball board paddle area2 v2.png",
                 800, 900, "pinball board right paddle area", "generic boardPiece");
 
-        permanentLoot1 = new BoardPiece(world, physicsBodies, 0, 0, "permanentLoot1.png",
-                46, 36, "permanentLoot1", "permanentLoot");
-        permanentLoot1.rotate("permanentLoot1", 4.5f, 19.5f, 4.71f, world, physicsBodies);
-        board.add(permanentLoot1);
-
-        permanentLoot2 = new BoardPiece(world, physicsBodies, 0, 0, "permanentLoot1.png",
-                46, 36, "permanentLoot1", "permanentLoot");
-        permanentLoot2.rotate("permanentLoot1", 31.2f, 17.2f, 1.57f, world, physicsBodies);
-        board.add(permanentLoot2);
-
-        permanentLoot3 = new BoardPiece(world, physicsBodies, 0, 0, "permanentLoot2.png",
-                65, 53, "permanentLoot2", "permanentLoot");
-        permanentLoot3.rotate("permanentLoot2", 1.6f, 35, 4.71f, world, physicsBodies);
-        board.add(permanentLoot3);
-
-        permanentLoot4 = new BoardPiece(world, physicsBodies, 0, 0, "permanentLoot2.png",
-                65, 53, "permanentLoot2", "permanentLoot");
-        permanentLoot4.rotate("permanentLoot2", 34.1f, 31.8f, 1.57f, world, physicsBodies);
-        board.add(permanentLoot4);
-
-        permanentLoot5 = new BoardPiece(world, physicsBodies, 0, 0, "permanentLoot3.png",
-                108, 78, "permanentLoot3", "permanentLoot");
-        permanentLoot5.rotate("permanentLoot3", 21, 44, 3.14f, world, physicsBodies);
-        board.add(permanentLoot5);
-
+        // Permanent loot (the crystals/ores)  spawnX and Y have to be manually figured out (takes about 30 seconds of guessing and checking)
+        board.addNewPermanentLoot(BoardPiece.PermanentLootType.SMALL, world, physicsBodies, 4.5f, 19.5f, Entity.RotationRadians.LEFT);
+        board.addNewPermanentLoot(BoardPiece.PermanentLootType.SMALL, world, physicsBodies, 31.2f, 17.2f, Entity.RotationRadians.RIGHT);
+        board.addNewPermanentLoot(BoardPiece.PermanentLootType.MEDIUM, world, physicsBodies, 1.6f, 35, Entity.RotationRadians.LEFT);
+        board.addNewPermanentLoot(BoardPiece.PermanentLootType.MEDIUM, world, physicsBodies, 34.1f, 31.8f, Entity.RotationRadians.RIGHT);
+        board.addNewPermanentLoot(BoardPiece.PermanentLootType.LARGE, world, physicsBodies, 21, 44, Entity.RotationRadians.TOP);
 
         pusher = new Pusher(world, physicsBodies, 37.8f, 7, "pusher", pinballBoard);
         leftPaddle = new Flipper(world, physicsBodies, 12.5f, 4.5f, "left paddle.png",
                 "left paddle", "left paddle", leftFlipperArea, true);
         rightPaddle = new Flipper(world, physicsBodies, 30, 7, "right paddle.png",
                 "right paddle", "right paddle", rightFlipperArea, false);
-        bumper1 = new Bumper(world, physicsBodies, 12, 30, "1");
-        allBumpers.add(bumper1);
-        bumper2 = new Bumper(world, physicsBodies, 17, 35, "2");
-        allBumpers.add(bumper2);
-        bumper3 = new Bumper(world, physicsBodies, 22, 30, "3");
-        allBumpers.add(bumper3);
-        bumper4 = new Bumper(world, physicsBodies, 17, 25, "4");
-        allBumpers.add(bumper4);
+
+        // Bumpers 1 through 4
+        allBumpers.add(new Bumper(world, physicsBodies, 12, 30, "1"));
+        allBumpers.add(new Bumper(world, physicsBodies, 17, 35, "2"));
+        allBumpers.add(new Bumper(world, physicsBodies, 22, 30, "3"));
+        allBumpers.add(new Bumper(world, physicsBodies, 17, 25, "4"));
 
         world.setContactListener(new CustomContactListener());
 
@@ -122,7 +99,7 @@ public class MyGame extends ApplicationAdapter {
         FileHandle file = Gdx.files.internal("scores.txt");
         Scanner scoreInput = new Scanner(file.read());
         String potentialScoreString;
-        String regexPatternString = "(.+)\\s+(\\d+)\\s+(.+)";
+        String regexPatternString = "(.+)\\s+(\\d+)\\s+(.+)"; // to meet a requirement (?) I could easily make this unneeded
         Pattern regexPatten = Pattern.compile(regexPatternString);
         Matcher matches;
         while (scoreInput.hasNextLine()) {
@@ -143,6 +120,7 @@ public class MyGame extends ApplicationAdapter {
         highScoreFont.setUseIntegerPositions(false);
         highScoreFont.getData().setScale(SCALE_FACTOR / 1.6f, SCALE_FACTOR / 1.6f);
 
+        // This is just a slightly larger version of the above font
         playerScoreFont = new BitmapFont(Gdx.files.internal("font.fnt"), false);
         playerScoreFont.setUseIntegerPositions(false);
         playerScoreFont.getData().setScale(SCALE_FACTOR, SCALE_FACTOR);
@@ -156,7 +134,6 @@ public class MyGame extends ApplicationAdapter {
 
         rightPaddle.drawEntity(batch);
         leftPaddle.drawEntity(batch);
-        despawnLine.drawEntity(batch);
         pusher.drawEntity(batch);
         pinball.drawEntity(batch);
         board.drawBoard(batch);
@@ -170,7 +147,7 @@ public class MyGame extends ApplicationAdapter {
 		batch.end();
 
         // DEBUG WIREFRAME:
-        //debugRenderer.render(world, camera.combined);
+        debugRenderer.render(world, camera.combined);
 	}
 
     @Override
